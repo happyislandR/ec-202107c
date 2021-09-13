@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -131,6 +132,14 @@ public class ItemRepository {
 		List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
 		return itemList;
 	}
-	
-	
+
+	public void insert(Item item) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(item);
+
+		String sql = "INSERT INTO items(id, name, description, price_m, price_l, image_path, deleted)"
+		+ " VALUES(:id, :name, :description, :priceM, :priceL, :imagePath, :deleted)";
+
+		template.update(sql, param);
+	}
+
 }

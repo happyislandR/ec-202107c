@@ -7,8 +7,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: jyo00syuukau99@gmail.com
-    password: fttoxmfkzwdpvexl
+    username: masahiro.fukushima@rakus-partners.co.jp
+    password: phqztmndgeucfhyv
     properties:
       mail:
         smtp:

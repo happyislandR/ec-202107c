@@ -10,9 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jp.co.example.ecommerce_c.common.Batch;
 import jp.co.example.ecommerce_c.domain.Item;
 import jp.co.example.ecommerce_c.form.ShowItemListForm;
 import jp.co.example.ecommerce_c.service.ShowItemListService;
+import jp.co.example.ecommerce_c.service.importOutportService;
 
 /**
  * 商品情報を操作するコントローラー.
@@ -26,6 +28,9 @@ public class ShowItemListController {
 
 	@Autowired
 	private ShowItemListService service;
+
+	@Autowired
+	private importOutportService importOutportService;
 
 	private static final int VIEW_SIZE = 9;
 
@@ -194,6 +199,19 @@ public class ShowItemListController {
 			return "/item_list_toy";
 
 		}
-		
+
+		@RequestMapping("/import")
+		public String csvImport(Model model) {
+			Batch b = new Batch();
+			List<Item> itemList = b.importCSV();
+			int i = 19;
+			model.addAttribute("itemList", itemList);
+			for(Item item : itemList) {
+				item.setId(i);
+				importOutportService.addItem(item);
+				i++;
+			}
+			return "finishedImport";
+		}
 
 }
