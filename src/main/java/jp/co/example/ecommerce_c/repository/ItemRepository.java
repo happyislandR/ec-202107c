@@ -83,50 +83,53 @@ public class ItemRepository {
 		}
 		return itemList;
 	}
-	
-	
+
 	/**
 	 * 値段を昇順でソート.
+	 * 
 	 * @param price_m Mの金額
 	 * @return 金額が昇順でソートされた商品リスト
 	 */
-	public List<Item> findByPriceAsc(String sort){
+	public List<Item> findByPriceAsc(String sort) {
 		String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items ORDER BY price_m;";
 
 		List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
 		return itemList;
 	}
-	
+
 	/**
 	 * 値段を降順でソート.
+	 * 
 	 * @param price_m Mの金額
 	 * @return 金額が降順でソートされた商品リスト
 	 */
-	public List<Item> findByPriceDesc(String sort){
+	public List<Item> findByPriceDesc(String sort) {
 		String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items ORDER BY price_m DESC;";
 
 		List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
 		return itemList;
 	}
-	
+
 	/**
 	 * 名前を昇順でソート.
+	 * 
 	 * @param name 商品名
 	 * @return 商品名が昇順でソートされた商品リスト
 	 */
-	public List<Item> findByNameAsc(String sort){
+	public List<Item> findByNameAsc(String sort) {
 		String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items ORDER BY name;";
 
 		List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
 		return itemList;
 	}
-	
+
 	/**
 	 * 名前を降順でソート.
+	 * 
 	 * @param name 商品名
 	 * @return 商品名が降順でソートされた商品リスト
 	 */
-	public List<Item> findByNameDesc(String sort){
+	public List<Item> findByNameDesc(String sort) {
 		String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items ORDER BY name DESC;";
 
 		List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
@@ -137,9 +140,17 @@ public class ItemRepository {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(item);
 
 		String sql = "INSERT INTO items(id, name, description, price_m, price_l, image_path, deleted)"
-		+ " VALUES(:id, :name, :description, :priceM, :priceL, :imagePath, :deleted)";
+				+ " VALUES(:id, :name, :description, :priceM, :priceL, :imagePath, :deleted)";
 
 		template.update(sql, param);
+	}
+
+	public int findByMaxId() {
+		String sql = "SELECT max(id) FROM items;";
+		
+		SqlParameterSource param = new MapSqlParameterSource();
+		Integer result = template.queryForObject(sql, param, Integer.class);
+		return result;
 	}
 
 }

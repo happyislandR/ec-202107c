@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import jp.co.example.ecommerce_c.common.Batch;
 import jp.co.example.ecommerce_c.domain.Item;
 import jp.co.example.ecommerce_c.form.ShowItemListForm;
 import jp.co.example.ecommerce_c.service.ShowItemListService;
@@ -74,6 +73,9 @@ public class ShowItemListController {
 				itemList3.add(itemList2);
 				itemList2 = new ArrayList<>();
 			}
+		}
+		if (roopCount % 3 != 0) {
+			itemList3.add(itemList2);
 		}
 
 		model.addAttribute("itemList3", itemList3);
@@ -182,7 +184,7 @@ public class ShowItemListController {
 
 			List<List<Item>> itemList3 = new ArrayList<>();
 			List<Item> itemList2 = new ArrayList<>();
-			
+
 			int roopCount = 0;
 
 			for (Item item : itemList) {
@@ -195,6 +197,7 @@ public class ShowItemListController {
 					itemList2 = new ArrayList<>();
 				}
 			}
+
 			model.addAttribute("itemList3", itemList3);
 			return "/item_list_toy";
 
@@ -202,16 +205,8 @@ public class ShowItemListController {
 
 		@RequestMapping("/import")
 		public String csvImport(Model model) {
-			Batch b = new Batch();
-			List<Item> itemList = b.importCSV();
-			int i = 19;
-			model.addAttribute("itemList", itemList);
-			for(Item item : itemList) {
-				item.setId(i);
-				importOutportService.addItem(item);
-				i++;
-			}
-			return "finishedImport";
+			importOutportService.addItem();
+			return "redirect:/";
 		}
 
 }

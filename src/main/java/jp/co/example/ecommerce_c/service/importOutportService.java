@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jp.co.example.ecommerce_c.common.Batch;
 import jp.co.example.ecommerce_c.domain.Item;
 import jp.co.example.ecommerce_c.repository.ItemRepository;
 
@@ -16,8 +17,16 @@ public class importOutportService {
 	@Autowired
 	private ItemRepository itemRepository;
 
-	public void addItem(Item item) {
-		itemRepository.insert(item);
+	public void addItem() {	
+		Batch b = new Batch();
+		List<Item> itemList = b.importCSV();
+		int i = itemRepository.findByMaxId() + 1;
+		//int i = 19;
+		for(Item item : itemList) {
+			item.setId(i);
+			itemRepository.insert(item);
+			i++;
+		}
 	}
 
 	public List<Item> showItem() {
